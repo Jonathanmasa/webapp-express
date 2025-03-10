@@ -10,8 +10,8 @@ require('dotenv').config();
 const filmsRouter = require('./routers/films');
 
 // Importiamo i middleware di gestione errori
-const errorsHandler = require('./middlewears/errorsHandler');
-const notFound = require("./middlewears/notFound");
+const errorsHandler = require('./middlewares/errorsHandler');
+const notFound = require("./middlewares/notFound");
 
 // Importiamo il middleware per il percorso delle immagini
 const imagePathMiddleware = require('./middlewares/imagePath');
