@@ -1,22 +1,33 @@
 // importo i dati
-// const menu = require('../data/films');
+// const menu = require('../data/pizzas');
 
 // Importiamo il file di connessione al database
 const connection = require('../data/db');
 
 
-// gruppo delle funzione della logica relativa alle rotte dei film
+// gruppo delle funzione della logica relativa alle rotte delle pizze
 
 function index(req, res) {
 
-    // query di richiesta films
-    const booksSql = "SELECT * FROM movies;";
+    // query di richiesta film
+    const filmsSql = "SELECT * FROM movies;";
 
     connection.query(filmsSql, (err, result) => {
         // se la query non va a buon fine
         if (err) return res.status(500).json({ error: 'Database query failed' });
+
+
+
+        // versione mappata del risultato
+        const films = result.map(film => {
+            return {
+                ...film,
+                image: req.imagePath + film.image
+            }
+        })
+
         // se tutto funziona
-        res.json(result);
+        res.json(films);
     });
 
 }
@@ -41,7 +52,7 @@ function show(req, res) {
 
         // se tutto funziona
         // res.json(filmResult[0]);
-        const film = filmResult[0];
+        const book = filmResult[0];
 
         connection.query(reviewSql, [id], (err, reviewResult) => {
             // se la query non va a buon fine
