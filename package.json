@@ -1,0 +1,27 @@
+{
+  "name": "webapp-express",
+  "version": "1.0.0",
+  "description": "BE webapp",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "watch": "node --watch app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "webapp-express"
+  },
+  "keywords": [
+    "movies",
+    "webapp",
+    "express",
+    "node"
+  ],
+  "author": "Jonathan Masa",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mysql2": "^3.13.0"
+  }
+}
