@@ -1,7 +1,6 @@
 function setImagePath(req, res, next) {
-    // creaimo il path assoluto della img
     req.imagePath = `${req.protocol}://${req.get('host')}/img/films/`;
-    next()
+    console.log("DEBUG - Percorso immagini impostato:", req.imagePath);
+    next();
 }
-
 module.exports = setImagePath;

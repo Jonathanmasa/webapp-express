@@ -1,48 +1,54 @@
+// Caricamento delle variabili d'ambiente
+require('dotenv').config();
+
 const express = require('express');
+const cors = require('cors');  // se necessario
+const path = require('path');
+
 const app = express();
-const cors = require('cors');
+const port = process.env.PORT || 3000;
 
-const port = process.env.PORT || 3000; 
-
-require('dotenv').config(); 
+// Importiamo i middleware
+const errorsHandler = require('./middlewares/errorsHandler');
+const notFound = require('./middlewares/notFound');
+const imagePathMiddleware = require('./middlewares/imagePath');
 
 // Importiamo il router dei film
 const filmsRouter = require('./routers/films');
 
-// Importiamo i middleware di gestione errori
-const errorsHandler = require('./middlewares/errorsHandler');
-const notFound = require("./middlewares/notFound");
-
-// Importiamo il middleware per il percorso delle immagini
-const imagePathMiddleware = require('./middlewares/imagePath');
-
 // Definiamo l'uso di una cartella per i file statici
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));  // Corretto per gestire i percorsi assoluti
 
 // Registro il body-parser per "application/json"
 app.use(express.json());
 
-// Registro il middleware di CORS
-app.use(cors()); 
+// Abilitare CORS se necessario (puoi decommentare questa riga se vuoi abilitare CORS)
+app.use(cors());
 
-// Registro il middleware di gestione immagini
+// Registro il middleware di gestione immagini (supponiamo che tu stia impostando un percorso base per le immagini)
 app.use(imagePathMiddleware);
+
+// Registro il router per i film
+app.use("/api/films", filmsRouter);
 
 // Definiamo la rotta home
 app.get('/api', (req, res) => {
     res.send("Ciao, sono la rotta Home dell'app di recensione film");
 });
 
-// Utilizziamo la rotta dei film andando a definire la parte iniziale delle rotte
-app.use("/api/films", filmsRouter);
+// Debug: stampo tutte le rotte registrate
+console.log("Rotte registrate:");
+app._router.stack.forEach((r) => {
+    if (r.route && r.route.path) {
+        console.log(r.route.path);
+    }
+});
 
-// Utilizzo middleware di gestione errore server
+// Middleware di gestione degli errori
 app.use(errorsHandler);
-
-// Utilizzo middleware di gestione not found 404
 app.use(notFound);
 
-// Avvio del server sulla porta specificata
+// Avvio del server
 app.listen(port, () => {
-    console.log(`Server in esecuzione su http://localhost:${port}`);
+    console.log(`✅ Server in esecuzione su http://localhost:${port}`);
 });

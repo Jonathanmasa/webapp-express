@@ -6,14 +6,22 @@ function index(req, res) {
     const filmsSql = "SELECT * FROM movies;";
 
     connection.query(filmsSql, (err, result) => {
-        if (err) return res.status(500).json({ error: 'Database query failed' });
+        if (err) {
+            return res.status(500).json({ error: 'Database query failed' });
+        }
 
-        const imagePath = req.imagePath || '/default/path/';
-        
-        const films = result.map(film => ({
-            ...film,
-            image: imagePath + film.image
-        }));
+        const imagePath = req.imagePath || "/img/films/"; // Percorso base per le immagini
+
+        const films = result.map(film => {
+            // Costruisci il percorso dell'immagine
+            const finalImagePath = film.image ? imagePath + film.image : "/img/films/default.jpg"; // Percorso dell'immagine di default
+            console.log("Final image path: ", finalImagePath);  // Log per debug
+
+            return {
+                ...film,
+                image: finalImagePath
+            };
+        });
 
         res.json(films);
     });
@@ -31,6 +39,10 @@ function show(req, res) {
         if (filmResult.length === 0) return res.status(404).json({ error: 'Film not found' });
 
         const film = filmResult[0];
+
+        // Se l'immagine non esiste, impostiamo un'immagine di default
+        const imagePath = req.imagePath || "/img/films/";
+        film.image = film.image && film.image !== "" ? imagePath + film.image : "/img/films/default.jpg";
 
         connection.query(reviewSql, [id], (err, reviewResult) => {
             if (err) return res.status(500).json({ error: 'Database query failed' });
