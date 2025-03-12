@@ -2,7 +2,8 @@
 require('dotenv').config();
 
 const express = require('express');
-const cors = require('cors');  // se necessario
+// importo cors
+const cors = require('cors');  
 const path = require('path');
 
 const app = express();
@@ -17,15 +18,15 @@ const imagePathMiddleware = require('./middlewares/imagePath');
 const filmsRouter = require('./routers/films');
 
 // Definiamo l'uso di una cartella per i file statici
-app.use(express.static(path.join(__dirname, 'public')));  // Corretto per gestire i percorsi assoluti
+app.use(express.static(path.join(__dirname, 'public'))); 
 
 // Registro il body-parser per "application/json"
 app.use(express.json());
 
-// Abilitare CORS se necessario (puoi decommentare questa riga se vuoi abilitare CORS)
-app.use(cors());
+// Abilitare CORS se necessario 
+app.use(cors({ origin: process.env.FE_APP }))
 
-// Registro il middleware di gestione immagini (supponiamo che tu stia impostando un percorso base per le immagini)
+// Registro il middleware di gestione immagini 
 app.use(imagePathMiddleware);
 
 // Registro il router per i film
