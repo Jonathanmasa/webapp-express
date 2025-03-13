@@ -13,10 +13,9 @@ function index(req, res) {
         const imagePath = req.imagePath || "/img/films/"; // Percorso base per le immagini
 
         const films = result.map(film => {
-            // Costruisci il percorso dell'immagine
-            const finalImagePath = film.image ? imagePath + film.image : "/img/films/default.jpg"; // Percorso dell'immagine di default
-            console.log("Final image path: ", finalImagePath);  // Log per debug
-
+            // Costruzione  percorso dell'immagine
+            const finalImagePath = film.image ? imagePath + film.image : "/img/films/default.jpg"; 
+            console.log("Final image path: ", finalImagePath);  
             return {
                 ...film,
                 image: finalImagePath
@@ -59,5 +58,19 @@ function store(req, res) {
     res.status(501).json({ message: 'Not Implemented' });
 }
 
+// inserimento nuoa review
+function storeReview(req, res) {
+    const { id } = req.params;
+    const { name, vote, text } = req.body;
+
+    const insertReviewSql = 'INSERT INTO reviews (movie_id, name, vote, text) VALUES (?, ?, ?, ?)';
+
+    connection.query(insertReviewSql, [id, name, vote, text], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Database query failed' });
+        
+        res.status(201).json({ message: 'Review added', id: results.insertId });
+    });
+}
+
 // Esportiamo le funzioni
-module.exports = { index, show, store };
+module.exports = { index, show, store, storeReview };
