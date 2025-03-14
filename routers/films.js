@@ -3,6 +3,8 @@ const router = express.Router();
 
 // Importiamo il controller dei film
 const filmController = require("../controllers/moviesController");
+// importiamo il middelware della gestione file
+const upload = require('../middlewares/multer');
 
 // ROTTE PER I FILM
 
