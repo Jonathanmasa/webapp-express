@@ -14,8 +14,8 @@ router.get('/', filmController.index);
 // Ottieni i dettagli di un singolo film 
 router.get('/:id', filmController.show);
 
-// Aggiungi un nuovo film 
-router.post('/', filmController.store);
+// store aggiungi film
+router.post('/', upload.single('image'), filmController.store);
 
 // Aggiungi una recensione a un film specifico
 router.post('/:id/reviews', filmController.storeReview);

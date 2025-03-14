@@ -18,7 +18,7 @@ const imagePathMiddleware = require('./middlewares/imagePath');
 const filmsRouter = require('./routers/films');
 
 // Definiamo l'uso di una cartella per i file statici
-app.use(express.static(path.join(__dirname, 'public'))); 
+app.use('/img/films', express.static(path.join(__dirname, 'public/img/films'))); 
 
 // Registro il body-parser per "application/json"
 app.use(express.json());

@@ -53,9 +53,31 @@ function show(req, res) {
     });
 }
 
-// Funzione per aggiungere un film (ancora da implementare)
-function store(req, res) {
-    res.status(501).json({ message: 'Not Implemented' });
+// Funzione per aggiungere un film
+function store(req, res, next) {
+ 
+    const { title, director, abstract } = req.body;
+
+    // gestiamo il valore del nome file creato dal middleware
+    const imageName = `${req.file.filename}`;
+
+    // creiamo la query di insert
+    const query = "INSERT INTO movies (title, director, abstract, image ) VALUES (?, ?, ?, ?)";
+
+    connection.query(query,
+        [title, director, abstract, imageName],
+        (err, result) => {
+            if (err) {
+                console.log(err)
+                return next(new Error("Errore interno del server"));
+            }
+
+            res.status(201).json({
+                status: "success",
+                message: "Film creato con successo!",
+            });
+        })
+
 }
 
 // inserimento nuoa review
